@@ -34,15 +34,16 @@ using namespace std;
 
 using namespace GFFT;
 
-typedef TYPE ValueType;
-typedef PLACE Place;
+// typedef TYPE ValueType;
+// typedef PLACE Place;
 
-static const long_t N = NUM;
-static const long_t NThreads = NUMTHREADS;
+// static const long_t N = NUM;
+static const long_t N = 4;
+static const long_t NThreads = 1;
 //typedef TYPELIST_4(ulong_<2>, ulong_<3>, ulong_<4>, ulong_<5>) NList;
 typedef TYPELIST_1(ulong_<N>) NList;
 //typedef GenerateTransform<NList, ValueType, TransformTypeGroup::FullList, ulong_<1>, ParallelizationGroup::Default, Place> TransformSet;
-typedef GenerateTransform<NList, ValueType, TransformTypeGroup::FullList, ulong_<1>, OpenMP<NThreads>, Place> TransformSet;
+typedef GenerateTransform<NList, COMPLEX_DOUBLE, DFT, ulong_<1>, OpenMP<1>, OUT_OF_PLACE> TransformSet;
 
 
 
@@ -58,80 +59,80 @@ int main(int /*argc*/, char** /*argv[]*/)
     long_t i;
    
     typedef DFT TransformType;
-    typedef ValueType::ValueType T;
-    typedef ValueType::base_type BT;
+    typedef COMPLEX_DOUBLE::ValueType T;
+    typedef COMPLEX_DOUBLE::base_type BT;
     static const int C = Loki::TypeTraits<T>::isStdFundamental ? 2 : 1;
 
     TransformSet gfft;
-    TransformSet::ObjectType* fftobj  = gfft.CreateTransformObject(N, ValueType::ID, TransformType::ID, 1, 
-								   OpenMP<NThreads>::ID, Place::ID);
-//     TransformSet::ObjectType* ifftobj = gfft.CreateTransformObject(n, ValueType::ID, TransformType::Inverse::ID, 1, 
-// 								   ParallelizationGroup::Default::ID, Place::ID);
+//    TransformSet::ObjectType* fftobj  = gfft.CreateTransformObject(N, DOUBLE::ID, DFT::ID, 1, 
+//								   OpenMP<1>::ID, OUT_OF_PLACE::ID);
+// //     TransformSet::ObjectType* ifftobj = gfft.CreateTransformObject(n, ValueType::ID, TransformType::Inverse::ID, 1, 
+// // 								   ParallelizationGroup::Default::ID, Place::ID);
     
-// create sample data
-    T* data = new T [C*N];
-#if PLACE == OUT_OF_PLACE
-    T* dataout = new T [C*N];
-#endif
-    for (i=0; i < N; ++i) {
-//      GenInput<T>::rand(data, i);  // distribute in [-0.5;0.5] as in FFTW
-       GenInput<T>::seq(data, i);
-    }
+// // create sample data
+//     T* data = new T [C*N];
+// #if PLACE == OUT_OF_PLACE
+//     T* dataout = new T [C*N];
+// #endif
+//     for (i=0; i < N; ++i) {
+// //      GenInput<T>::rand(data, i);  // distribute in [-0.5;0.5] as in FFTW
+//        GenInput<T>::seq(data, i);
+//     }
 
-    DFT_wrapper<BT> dft(data, N);
+//     DFT_wrapper<BT> dft(data, N);
 
- // print out sample data
-#ifdef FOUT
-    cout<<"Input data:"<<endl;
-    for (i=0; i < N; ++i)
-      cout << GenOutput<T>(data,i) << endl;
-#endif
+//  // print out sample data
+// #ifdef FOUT
+//     cout<<"Input data:"<<endl;
+//     for (i=0; i < N; ++i)
+//       cout << GenOutput<T>(data,i) << endl;
+// #endif
 
-#if PLACE == OUT_OF_PLACE
-// apply FFT out-of-place
-   fftobj->fft(data, dataout);
-#else
-// apply FFT in-place
-   fftobj->fft(data);
-   T* dataout = data;
-#endif
+// #if PLACE == OUT_OF_PLACE
+// // apply FFT out-of-place
+//    fftobj->fft(data, dataout);
+// #else
+// // apply FFT in-place
+//    fftobj->fft(data);
+//    T* dataout = data;
+// #endif
    
-// do simple dft
-   dft.apply();
+// // do simple dft
+//    dft.apply();
 
-   BT* dataout1 = dft.getdata();
+//    BT* dataout1 = dft.getdata();
 
-// print out transformed data
-   cout.precision(3);
-#ifdef FOUT
-   cout<<"Result of transform:"<<endl;
-   for (i=0; i < N; ++i)
-     cout << GenOutput<T>(dataout,i) << "   \t"<< GenOutput<BT>(dataout1,i) <<" \t"<<endl;
-#endif
+// // print out transformed data
+//    cout.precision(3);
+// #ifdef FOUT
+//    cout<<"Result of transform:"<<endl;
+//    for (i=0; i < N; ++i)
+//      cout << GenOutput<T>(dataout,i) << "   \t"<< GenOutput<BT>(dataout1,i) <<" \t"<<endl;
+// #endif
 
-   dft.diff(dataout);
+//    dft.diff(dataout);
 
-   cout<<"Check against DFT:"<<endl;
-   double mx(-1);
-   double s = 0.;
-   for (i=0; i < N; ++i) {
-#ifdef FOUT
-      cout << GenOutput<T>(dataout,i) << endl;
-#endif
-      double re = ComplexWrapper<T>(dataout,i).real();
-      double im = ComplexWrapper<T>(dataout,i).imag();
-      mx = max(mx, fabs(re));
-      mx = max(mx, fabs(im));
-      s += re*re;
-      s += im*im;
-   }
-   cout<<"---------------------------------------------"<<endl;
-   cout << N << ": " << ValueType::name() << ", " << Place::name() << endl;
-   cout << mx << "  " << sqrt(s) << endl;
+//    cout<<"Check against DFT:"<<endl;
+//    double mx(-1);
+//    double s = 0.;
+//    for (i=0; i < N; ++i) {
+// #ifdef FOUT
+//       cout << GenOutput<T>(dataout,i) << endl;
+// #endif
+//       double re = ComplexWrapper<T>(dataout,i).real();
+//       double im = ComplexWrapper<T>(dataout,i).imag();
+//       mx = max(mx, fabs(re));
+//       mx = max(mx, fabs(im));
+//       s += re*re;
+//       s += im*im;
+//    }
+//    cout<<"---------------------------------------------"<<endl;
+//    cout << N << ": " << ValueType::name() << ", " << Place::name() << endl;
+//    cout << mx << "  " << sqrt(s) << endl;
 
-   delete [] data;
-#if PLACE == OUT_OF_PLACE
-   delete [] dataout;
-#endif
+//    delete [] data;
+// #if PLACE == OUT_OF_PLACE
+//    delete [] dataout;
+// #endif
 }
 
