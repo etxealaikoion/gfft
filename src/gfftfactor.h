@@ -19,7 +19,7 @@
     \brief Factorization meta-algorithms 
 */
 
-#include "metafactor.h"
+#include "../metafactor/metafactor.h"
 
 namespace GFFT {
 
