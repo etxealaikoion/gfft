@@ -32,3 +32,8 @@
 
 #Generated html
 doc/html
+/CMakeFiles/
+/build/
+/CMakeCache.txt
+/Makefile
+/cmake_install.cmake

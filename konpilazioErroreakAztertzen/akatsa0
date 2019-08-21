@@ -1,0 +1,22 @@
+required from ‘void GFFT::OUT_OF_PLACE::Function<FuncList, T>::fft(const T*, T*) [with 
+FuncList = GFFT::Caller
+<
+    Loki::Typelist
+    <
+        GFFT::OpenMP<1>,
+        Loki::Typelist
+        <
+            GFFT::InTimeOOP_omp
+            <
+                1, 4, Loki::Typelist<pair_<ulong_<2>, ulong_<2> >, Loki::NullType>,
+                GFFT::COMPLEX_DOUBLE, 1, MComplex<long_<0>, long_<-1> >, 1
+            >,
+            Loki::Typelist
+            <
+                GFFT::Forward<4, std::complex<double> >,
+                Loki::NullType
+            >
+        >
+    >
+>;
+T = std::complex<double>]’

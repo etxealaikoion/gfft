@@ -1,0 +1,18 @@
+required from ‘void GFFT::Caller<Loki::Typelist<T, U> >::apply(const T1*, T2*) [with
+T1 = std::complex<double>;
+T2 = std::complex<double>;
+Head = GFFT::InTimeOOP_omp
+<
+   1, 4, Loki::Typelist
+   <
+      pair_<ulong_<2>, ulong_<2> >,
+      Loki::NullType
+   >,
+   GFFT::COMPLEX_DOUBLE, 1, MComplex<long_<0>, long_<-1> >,
+   1
+>;
+Tail = Loki::Typelist
+<
+   GFFT::Forward<4, std::complex<double> >,
+   Loki::NullType
+>]’

@@ -43,7 +43,7 @@ static const long_t NThreads = 1;
 //typedef TYPELIST_4(ulong_<2>, ulong_<3>, ulong_<4>, ulong_<5>) NList;
 typedef TYPELIST_1(ulong_<N>) NList;
 //typedef GenerateTransform<NList, ValueType, TransformTypeGroup::FullList, ulong_<1>, ParallelizationGroup::Default, Place> TransformSet;
-typedef GenerateTransform<NList, COMPLEX_DOUBLE, DFT, ulong_<1>, OpenMP<1>, OUT_OF_PLACE> TransformSet;
+typedef GenerateTransform<NList, COMPLEX_DOUBLE, DFT, ulong_<1>, ParallelizationGroup::Default, OUT_OF_PLACE> TransformSet;
 
 
 
@@ -56,12 +56,12 @@ typedef GenerateTransform<NList, COMPLEX_DOUBLE, DFT, ulong_<1>, OpenMP<1>, OUT_
 int main(int /*argc*/, char** /*argv[]*/)
 {
     cout.precision(16);
-    long_t i;
+    // long_t i;
    
-    typedef DFT TransformType;
-    typedef COMPLEX_DOUBLE::ValueType T;
-    typedef COMPLEX_DOUBLE::base_type BT;
-    static const int C = Loki::TypeTraits<T>::isStdFundamental ? 2 : 1;
+    // typedef DFT TransformType;
+    // typedef COMPLEX_DOUBLE::ValueType T;
+    // typedef COMPLEX_DOUBLE::base_type BT;
+    // static const int C = Loki::TypeTraits<T>::isStdFundamental ? 2 : 1;
 
     TransformSet gfft;
 //    TransformSet::ObjectType* fftobj  = gfft.CreateTransformObject(N, DOUBLE::ID, DFT::ID, 1, 
